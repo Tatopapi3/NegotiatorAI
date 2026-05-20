@@ -1,3 +1,4 @@
+from typing import Optional
 from supabase import create_client, Client
 from core.config import SUPABASE_URL, SUPABASE_KEY
 
@@ -9,7 +10,7 @@ def get_client() -> Client:
 
 
 def insert_job_description(title: str, company: str, location: str,
-                           salary_min: int | None, salary_max: int | None,
+                           salary_min: Optional[int], salary_max: Optional[int],
                            content: str, embedding: list[float]) -> dict:
     result = _client.table("job_descriptions").insert({
         "title": title,
@@ -23,7 +24,7 @@ def insert_job_description(title: str, company: str, location: str,
     return result.data[0]
 
 
-def insert_candidate_profile(name: str | None, title: str, years_exp: int,
+def insert_candidate_profile(name: Optional[str], title: str, years_exp: int,
                               skills: list[str], content: str,
                               embedding: list[float]) -> dict:
     result = _client.table("candidate_profiles").insert({

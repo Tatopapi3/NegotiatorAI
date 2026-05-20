@@ -1,4 +1,5 @@
 import io
+from typing import Optional
 import pdfplumber
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
@@ -14,8 +15,8 @@ class JDInput(BaseModel):
     title: str
     company: str
     location: str = "New York, NY"
-    salary_min: int | None = None
-    salary_max: int | None = None
+    salary_min: Optional[int] = None
+    salary_max: Optional[int] = None
     content: str
 
 
@@ -40,8 +41,8 @@ async def ingest_jd_pdf(
     title: str = Form(...),
     company: str = Form(...),
     location: str = Form("New York, NY"),
-    salary_min: int | None = Form(None),
-    salary_max: int | None = Form(None),
+    salary_min: Optional[int] = Form(None),
+    salary_max: Optional[int] = Form(None),
 ):
     if not file.filename.endswith(".pdf"):
         raise HTTPException(400, "Only PDF files are supported.")
@@ -62,7 +63,7 @@ async def ingest_jd_pdf(
 # ── Candidate Profile ──────────────────────────────────────────────────────────
 
 class ProfileInput(BaseModel):
-    name: str | None = None
+    name: Optional[str] = None
     title: str
     years_exp: int
     skills: list[str] = []
@@ -90,7 +91,7 @@ async def ingest_profile_pdf(
     title: str = Form(...),
     years_exp: int = Form(...),
     skills: str = Form(""),  # comma-separated
-    name: str | None = Form(None),
+    name: Optional[str] = Form(None),
 ):
     if not file.filename.endswith(".pdf"):
         raise HTTPException(400, "Only PDF files are supported.")
